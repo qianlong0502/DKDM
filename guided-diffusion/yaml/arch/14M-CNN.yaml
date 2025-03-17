@@ -1,0 +1,15 @@
+image_size: 32
+num_channels: 64 # less
+num_res_blocks: 3
+num_heads: 4
+num_heads_upsample: -1
+num_head_channels: 32
+attention_resolutions: "16,8"
+channel_mult: ''
+dropout: 0.3
+class_cond: false
+use_checkpoint: false
+use_scale_shift_norm: true
+resblock_updown: true
+use_fp16: true
+use_new_attention_order: true

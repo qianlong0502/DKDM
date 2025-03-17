@@ -1,0 +1,12 @@
+learn_sigma: true
+diffusion_steps: 1000
+noise_schedule: cosine
+timestep_respacing: "1000"
+use_ddim: false
+use_kl: false
+predict_xstart: false
+rescale_timesteps: false
+rescale_learned_sigmas: true # differ
+clip_denoised: true
+clip_last: false
+clip_first: false

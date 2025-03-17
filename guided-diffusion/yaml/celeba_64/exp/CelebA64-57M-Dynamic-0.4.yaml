@@ -1,0 +1,31 @@
+teacher:
+  prob: 1.0
+  BATCH: 0.4
+  input_perturb: 0.0
+  batch_size: 256
+  model_path: model/DDPM_IP_celeba64.pt
+  iter_choice: dynamic_iterative_distillation
+  tempfile: experiments/cache/CelebA64-Dynamic-0.4.cache
+
+  model: yaml/arch/295M-CNN.yaml
+  diffusion: yaml/celeba_64/diffsion.yaml
+
+student:
+  schedule_sampler: uniform
+  lr: 0.0001
+  weight_decay: 0.0
+  lr_anneal_steps: 0
+  batch_size: 256 # 4 A100 GPU
+  microbatch: -1
+  ema_rate: "0.9999"
+  resume_checkpoint: ''
+  use_fp16: true
+  fp16_scale_growth: 0.001
+
+  model_path: ''
+  log_interval: 10
+  save_interval: 10000
+  cache_save_interval: -1
+
+  model: yaml/arch/57M-CNN-CelebA.yaml
+  diffusion: yaml/celeba_64/diffsion.yaml

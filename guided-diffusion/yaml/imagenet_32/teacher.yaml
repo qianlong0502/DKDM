@@ -1,0 +1,3 @@
+use_fp16: true
+model: yaml/arch/57M-CNN.yaml
+diffusion: yaml/imagenet_32/diffusion.yaml
