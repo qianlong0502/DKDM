@@ -38,10 +38,14 @@ def main():
     argparser.add_argument("--timestep_respacing", type=str, default='50')
     argparser.add_argument("--use_ddim", type=str2bool, default=False)
     argparser.add_argument("--name", type=str, default='')
+    argparser.add_argument("--log_dir", type=str, default='')
     args = argparser.parse_args()
     conf = OmegaConf.load(args.config)
     
-    log_dir = datetime.datetime.now().strftime(f"Teacher-%Y-%m-%d-%H-%M-%S-%f")
+    if args.log_dir:
+        log_dir = args.log_dir
+    else:
+        log_dir = datetime.datetime.now().strftime(f"%Y-%m-%d-%H-%M-%S-%f")
     logger.configure(os.path.join(os.getcwd(), 'experiments', 'sample', log_dir))
 
     if 'student' in conf.keys():
