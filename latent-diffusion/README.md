@@ -67,7 +67,7 @@ python main.py --base configs/distill/ffhq/baseline-ffhq-ldm-vq-4.yaml -t --gpus
 
 ### Data-Limited and Data-Based Training
 
-**① Preparation**: Download CelebA-HQ-256 and follow `data/celebahq_npy` to generate npy file in `data/celebahq`. Download FFHQ-256 datasets and move it to `data/ffhq`. The final files should be like: `data/celebahq/imgHQ00000.npy`~`data/celebahq/imgHQ29999.npy` and `data/ffhq/00000.png`~`data/ffhq/69999.png`. The index of dataset for data-limited training was previous generated in `*_baseline_*.txt`. You could refer to `data/celebahq_mix.py` and `data/ffhq_mix.py` to understand how to generate them.
+**① Preparation**: Download CelebA-HQ-256 and follow `data/celebahq_npy` to generate npy file in `data/celebahq`. Download FFHQ-256 datasets and move it to `data/ffhq`. The final files should be like: `data/celebahq/imgHQ00000.npy`\~`data/celebahq/imgHQ29999.npy` and `data/ffhq/00000.png`\~`data/ffhq/69999.png`. The index of dataset for data-limited training was previous generated in `*_baseline_*.txt`. You could refer to `data/celebahq_mix.py` and `data/ffhq_mix.py` to understand how to generate them.
 
 **② Train**
 
