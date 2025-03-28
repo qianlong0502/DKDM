@@ -1,0 +1,124 @@
+model:
+  base_learning_rate: 9.6e-05
+  target: ldm.models.diffusion.ddpm_dkdm.LatentDiffusion_Distill
+  params:
+    teacher_layers: []
+    student_layers: []
+    distill_fn: [['l2', 0.1]]
+    linear_start: 0.0015
+    linear_end: 0.0195
+    num_timesteps_cond: 1
+    log_every_t: 200
+    timesteps: 1000
+    first_stage_key: image
+    image_size: 64
+    channels: 3
+    monitor: val/loss_simple_ema
+
+    teacher_config:
+      target: ldm.modules.diffusionmodules.openaimodel.UNetModel
+      params:
+        image_size: 64
+        in_channels: 3
+        out_channels: 3
+        model_channels: 224
+        attention_resolutions:
+        # note: this isn\t actually the resolution but
+        # the downsampling factor, i.e. this corresnponds to
+        # attention on spatial resolution 8,16,32, as the
+        # spatial reolution of the latents is 64 for f4
+        - 8
+        - 4
+        - 2
+        num_res_blocks: 2
+        channel_mult:
+        - 1
+        - 2
+        - 3
+        - 4
+        num_head_channels: 32
+
+    teacher_ckp: 'models/ldm/celeba256/model.ckpt'
+    cache_path: 'models/ldm/celeba256/cache'
+    BATCH: 4.000
+
+    unet_config:
+      target: ldm.modules.diffusionmodules.openaimodel.UNetModel
+      params:
+        image_size: 64
+        in_channels: 3
+        out_channels: 3
+        model_channels: 128
+        attention_resolutions:
+        # note: this isn\t actually the resolution but
+        # the downsampling factor, i.e. this corresnponds to
+        # attention on spatial resolution 8,16,32, as the
+        # spatial reolution of the latents is 64 for f4
+        - 8
+        - 4
+        - 2
+        num_res_blocks: 2
+        channel_mult:
+        - 1
+        - 2
+        - 3
+        - 4
+        num_head_channels: 32
+    first_stage_config:
+      target: ldm.models.autoencoder.VQModelInterface
+      params:
+        embed_dim: 3
+        n_embed: 8192
+        ckpt_path: models/ldm/celeba256/ae.ckpt
+        ddconfig:
+          double_z: false
+          z_channels: 3
+          resolution: 256
+          in_channels: 3
+          out_ch: 3
+          ch: 128
+          ch_mult:
+          - 1
+          - 2
+          - 4
+          num_res_blocks: 2
+          attn_resolutions: []
+          dropout: 0.0
+        lossconfig:
+          target: torch.nn.Identity
+    cond_stage_config: __is_unconditional__
+
+    log_images_kwargs:
+      quantize_denoised: False
+      N: 64
+      ddim_eta: 0.0
+      inpaint: False
+      plot_progressive_rows: False
+      # ddim_steps: 256
+      plot_diffusion_rows: False
+      save_img_path: 'lsun_churches-ldm-kl-8-bs64-64c-distill'
+
+data:
+  batch_size: 48
+  dummy_dataset_size: 30000
+
+others:
+  every_n_train_steps: 10000
+
+
+lightning:
+  callbacks:
+    image_logger:
+      target: main.ImageLogger
+      params:
+        batch_frequency: 2500
+        max_images: 8
+        increase_log_steps: False
+        log_images_kwargs:
+          quantize_denoised: False
+          inpaint: False
+          plot_progressive_rows: False
+          plot_diffusion_rows: False
+
+  trainer:
+    benchmark: True
